@@ -1,0 +1,269 @@
+  //    {/* Main Chat Area */}
+  //    <Box flex="1" display={"flex"} minH="100vh" justifyContent={"space-between"}
+  //    flexDirection={"column"}
+  //    alignItems={"center"}
+  //    pt={32}
+  //  // zIndex={"tooltip"}
+
+  //  >
+  //    {/* Image Input */}
+  //    <Box
+  //      // bg={selectedImages.length > 0 ? "red" : "transparent"}
+  //      zIndex={"tooltip"}
+  //      h={selectedImages.length > 0 ? "300px" : "80px"}
+  //      flex={1}
+  //      py={0}
+  //      left={0}
+  //      right={0}
+  //      position={"fixed"}
+  //      display={"flex"}
+  //      justifyContent={"center"}
+  //    >
+
+  //      <Box px="2" position={'fixed'} top={0} w="100%"
+  //        maxW="700px"
+  //        bg={selectedImages.length > 0 ? "white" : "whiteAlpha.600"}
+  //        boxShadow={selectedImages.length > 0 ? "lg" : "none"}
+  //        pt={2}
+  //        pb={1}
+  //        h={selectedImages.length > 0 ? "100vh" : "fit-content"}
+  //        style={{
+  //          backdropFilter: "blur(12px)"
+
+  //        }}
+
+  //      >
+
+
+  //        {selectedImages.length < 1 && (
+  //          <>
+  //            <input type="file" id="imageInput" accept="image/*" multiple onChange={handleImageSelect} style={{ display: 'none' }} />
+  //            <FormLabel w="100%" htmlFor="imageInput">
+  //              {selectedImages.length < 1 && (
+  //                <Button h="50px" w="100%"
+  //                  float={"right"}
+  //                  maxW={"200px"}
+  //                  as="span" leftIcon={<FiImage />} colorScheme="red">
+  //                  New Upload
+  //                </Button>
+  //              )}
+  //            </FormLabel>
+  //          </>
+  //        )}
+
+  //        {selectedImages.length > 0 && (
+  //          <VStack px={2} spacing="2" w="100%" py="5"
+  //            bg="whiteAlpha.400"
+  //            style={{
+  //              backdropFilter: "12px"
+  //            }}
+  //          >
+
+  //            <VStack w="100%">
+
+  //              <HStack w="100%">
+  //                {selectedImages.map((image, index) => (
+  //                  <VStack key={index} align="center" position="relative">
+  //                    <IconButton
+  //                      aria-label="Remove Image"
+  //                      icon={<FiTrash color="red" />}
+  //                      position="absolute"
+  //                      top="2px"
+  //                      right="2px"
+  //                      size="sm"
+  //                      onClick={() => handleRemoveImage(index)} // Handle image removal
+  //                    />
+  //                    <Image src={URL.createObjectURL(image)} alt={`Selected Image ${index}`} maxH={"70px"} maxW={"70px"} />
+  //                  </VStack>
+  //                ))}
+
+  //              </HStack>
+
+  //              <Textarea
+  //                w="100%"
+  //                border={"1px solid green"}
+  //                placeholder="Add a caption..."
+  //                value={caption}
+  //                onChange={(e) => setCaption(e.target.value)}
+  //                size="sm"
+  //              />
+  //            </VStack>
+
+  //            <Button
+  //              // position={"absolute"}
+  //              zIndex={"tooltip"}
+  //              right={0}
+  //              leftIcon={<FiSend />}
+  //              w="80px" onClick={sendImages} colorScheme="teal" px={3} boxShadow={"md"}>
+  //              Send
+  //            </Button>
+
+  //          </VStack>
+  //        )}
+  //      </Box>
+  //    </Box>
+
+
+
+
+
+
+
+
+   
+
+  
+  
+  
+  
+  
+  
+  // {/* Chat messages */}
+  //         <Box mb="4" w="100%"
+  //           minH="100vh"
+  //           bg="#f3f4f6"
+  //         >
+  //           {chatMessages.map((message) => (
+  //             <Box
+  //               key={message.id}
+  //               // className={`${chatMessageContainerClass} chat-message-container`} // Add the chat-message-container class
+  //               mb="4"
+  //               display="flex"
+  //               width={message.images.length === 1 ? '100%' : '100%'}
+  //               py={5}
+  //               borderTop={"0.5px solid #c4cad2"}
+  //               justifyContent={"center"}
+  //               flexDirection={"column"}
+  //               alignItems={"center"}
+
+  //             >
+
+
+  //               <Box>
+  //                 <Box
+  //                   h="60px"
+  //                   w="60px"
+  //                   borderRadius={"10px"}
+  //                   left={"300px"}
+  //                   // right={0}
+  //                   position={"absolute"}
+  //                   bg={"green"}
+  //                 />
+  //               </Box>
+
+  //               <Box
+  //                 bg="white" boxShadow={"md"} pl={6} py={3} w="100%"
+  //                 maxW="700px"
+  //               >
+
+  //                 <Text pb={6} fontWeight={"semibold"} fontSize={"md"}>{message.caption}</Text>
+
+
+  //                 <HStack
+  //                   overflowX={"hidden"}
+  //                   alignItems={"center"}
+  //                 // spacing={1}
+  //                 >
+  //                   {message.images.slice(0, 3).map((image: any, index: number) => (
+  //                     <Box
+  //                       key={index}
+  //                       mb="2"
+  //                     >
+  //                       <Image src={image} alt={`Image ${index}`} maxH={"300px"} maxW={"auto"}
+  //                         position="relative"
+  //                         cursor="pointer"
+  //                         onClick={() => openGalleryModal(message.images)}
+  //                       />
+  //                       {message.images.length > 3 && index === 2 && (
+  //                         <Box className="more-images-box"
+  //                           //  onClick={() => openGalleryModal(message.images)}
+  //                           color="white"
+  //                           fontWeight={"xl"}
+  //                           rounded={"full"}
+  //                           w="40px"
+  //                           h="40px"
+  //                           bg="red.700"
+
+  //                           p={1}
+
+  //                         >
+  //                           <Center>
+  //                             <Heading
+  //                               fontSize={"xl"}
+  //                             >+{message.images.length - 3}</Heading>
+  //                           </Center>
+  //                         </Box>
+  //                       )}
+
+  //                     </Box>
+  //                   ))}
+
+  //                 </HStack>
+
+
+
+
+  //                 {message.pollOptions.map((option) => (
+  //                   <Flex key={option.id} align="center" justify="space-between">
+  //                     <Text>{option.text}</Text>
+  //                     <HStack>
+  //                       {option.id === selectedOption ? (
+  //                         <IconButton aria-label="Vote" icon={<FiPlus />} onClick={() => voteOption(option.id, message.id)} />
+  //                       ) : (
+  //                         <IconButton aria-label="Select" icon={<FiPlus />} onClick={() => selectOption(option.id, message.id)} />
+  //                       )}
+  //                       <Text>{option.votes}</Text>
+  //                     </HStack>
+  //                   </Flex>
+  //                 ))}
+
+  //                 {/* Poll Option Addition Form */}
+  //                 {selectedMessageId === message.id && (
+  //                   <Box>
+  //                     <Input
+  //                       placeholder="Enter poll option"
+  //                       value={pollOptionText}
+  //                       onChange={(e) => setPollOptionText(e.target.value)}
+  //                     />
+  //                     <Button onClick={() => addPollOptionToMessage(message.id, pollOptionText)}>
+  //                       Add Poll Option
+  //                     </Button>
+  //                   </Box>
+  //                 )}
+
+  //               </Box>
+
+
+  //               {/* Poll Option Addition Button */}
+  //               <Box className="options-menu" mt={2}>
+  //                 <HStack>
+  //                   <Tooltip label="Add Poll Option" aria-label="Add Poll Option">
+  //                     <IconButton
+  //                       bg="red.700"
+  //                       color="white"
+  //                       aria-label="Add Poll Option"
+  //                       icon={<FiPlus />}
+  //                       onClick={() => setSelectedMessageId(message.id)}
+  //                     />
+  //                   </Tooltip>
+
+  //                   <Tooltip label="View Images" aria-label="View Images">
+  //                     <IconButton
+  //                       bg="red.700"
+  //                       color="white"
+  //                       aria-label="View Images"
+  //                       icon={<FiExternalLink />}
+  //                       onClick={() => openGalleryModal(message.images)}
+  //                     />
+  //                   </Tooltip>
+  //                 </HStack>
+  //               </Box>
+
+
+  //             </Box>
+
+
+  //           ))}
+  //         </Box>
+
+  // </Box>
