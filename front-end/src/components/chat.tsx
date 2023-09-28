@@ -13,6 +13,7 @@ import { MetaMaskInpageProvider } from "@metamask/providers";
 import contractArtifact from "../components/HealthSync.json"
 import { usePeerContext } from '@/context/peer-ctx'
 import { FaRocket } from 'react-icons/fa';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 
 const apiKey = 'a7a2b5a5.89b833ffb83d4d2f9262c182ac836192'; //This is for testing. Do not expose keys in production
 
@@ -104,9 +105,7 @@ export default function ChatContainer() {
   const [selectedMessageId, setSelectedMessageId] = useState("")
   const [showInputOption, setShowInputOption] = useState<boolean>(false);
   const [userVotes, setUserVotes] = useState<any>({}); //save in a database in future;
-
-
-
+  const [conditionInfo, setConditionInfo] = useState<any | null>(null)
 
 
 
@@ -549,7 +548,12 @@ export default function ChatContainer() {
 
     async function fetchConditions() {
       const response = await lighthouse.getAccessConditions(cid);
-      console.log(response)
+      const info = {
+        owner: response.data.owner,
+        shared: response.data.sharedTo
+      }
+      console.log(info)
+      setConditionInfo(info);
     }
 
 
@@ -598,14 +602,41 @@ export default function ChatContainer() {
               <ModalBody>
                 <Text>This image is encrypted using lighthouse. Only users who have ownership or shared access can see it</Text>
                 <br />
-                <Text fontSize={"xs"}>Author: </Text>
-                <Text fontSize={"xs"}>Ownership: </Text>
-                <Text fontSize={"xs"}>Shared with me: </Text>
+                <HStack>
+                  <Text fontSize={"xs"}>Author: </Text>
+                  {conditionInfo && conditionInfo.owner === account ?
+                    (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+                    ) : (
+                      <XCircleIcon className="w-6 h-6 text-red-500" />
+                    )
+                  }
+                </HStack>
+                <HStack>
+                  <Text fontSize={"xs"}>Author: </Text>
+                  {conditionInfo && conditionInfo.owner === account ?
+                    (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+                    ) : (
+                      <XCircleIcon className="w-6 h-6 text-red-500" />
+                    )
+                  }
+                </HStack>
+                <HStack>
+                  <Text fontSize={"xs"}>Shared with me: </Text>
+                  {conditionInfo && conditionInfo.shared.includes(account) ?
+                    (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+                    ) : (
+                      <XCircleIcon className="w-6 h-6 text-red-500" />
+                    )
+                  }
+                </HStack>
+
+
 
               </ModalBody>
               <ModalFooter >
                 <Button bg="gray"
                   mr={5}
+                  onClick={() => decryptImage(cid, messageId)}
                 >
                   Unlock
                 </Button>
@@ -813,8 +844,13 @@ export default function ChatContainer() {
                   <Box>{renderImage(JSON.parse(msg).image, JSON.parse(msg).id, isOpen, onOpen, onClose)}</Box>
                 )}
 
+
                 <>
-                  <Text pb={1} fontWeight={"bold"} fontSize={"xs"}>Poll: Tap to Choose an appropraite option</Text>
+                  {JSON.parse(msg).image.length > 1 && (
+                    <Text pb={1} fontWeight={"bold"} fontSize={"xs"}>Poll: Tap to Choose an appropraite option</Text>)}
+
+
+
                   {JSON.parse(msg).pollOptions.length > 0 && JSON.parse(msg).pollOptions.map((option: PollOption, i: number) => (
                     <Flex
                       py={2}

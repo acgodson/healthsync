@@ -526,8 +526,8 @@ export default function Home() {
             <HStack>
               <Text>    Whitelist:</Text>
               <Button h="30px" fontSize={"sm"} colorScheme='green' onClick={
-                accessConditions
-                // onOpen
+                // accessConditions
+                onOpen
 
               }>
                 Add

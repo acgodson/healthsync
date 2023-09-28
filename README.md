@@ -1,6 +1,11 @@
 ...updating Readme
 
-# HealthSync x Universal Connectivity x LighHouse Access Control
+# Welcome to HealthSync
+
+### Powered by filecoin, Libp2p & LighHouse.storgae
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID_HERE" frameborder="0" allowfullscreen></iframe>
+
 
 ## Testing locally
 
@@ -34,5 +39,3 @@ Start the dev server:
 ```
 npm run dev
 ```
-
-
