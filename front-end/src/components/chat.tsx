@@ -14,7 +14,7 @@ import contractArtifact from "../components/HealthSync.json"
 import { usePeerContext } from '@/context/peer-ctx'
 import { FaRocket } from 'react-icons/fa';
 
-const apiKey = 'a7a2b5a5.89b833ffb83d4d2f9262c182ac836192';
+const apiKey = 'a7a2b5a5.89b833ffb83d4d2f9262c182ac836192'; //This is for testing. Do not expose keys in production
 
 
 interface MessageProps extends CM { }
@@ -102,11 +102,12 @@ export default function ChatContainer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [pollOptionText, setPollOptionText] = useState("");
   const [selectedMessageId, setSelectedMessageId] = useState("")
-  const [showInputOption, setShowInputOption] = useState<boolean>(false)
+  const [showInputOption, setShowInputOption] = useState<boolean>(false);
+  const [userVotes, setUserVotes] = useState<any>({}); //save in a database in future;
 
 
 
-  const userVotes: any = {};
+
 
 
 
@@ -377,6 +378,7 @@ export default function ChatContainer() {
 
 
 
+
   // Function to handle user voting and update the message
   const vote = useCallback(async (messageId: string, pollOptionId: number) => {
     if (!account) return;
@@ -387,93 +389,95 @@ export default function ChatContainer() {
     }
 
     // Check if the user has already voted for this message
+    if (!userVotes[account]) {
+      userVotes[account][messageId] = [pollOptionId];
+    }
+
+    // Check if the user has already voted for this message
     if (!userVotes[account][messageId]) {
       // Add the user's vote to the data structures
       userVotes[account][messageId] = [pollOptionId]; // Initialize with an array containing the voted poll option
 
       // Update the vote count for the poll option
-      const message: any = filteredArray.find((m) => JSON.parse(m).id === messageId);
+      const messagebj: any = filteredArray.find((m: any) => JSON.parse(m.msg).id === messageId);
 
-      console.log("I found this", message)
-      if (message) {
-        const pollOption = message.pollOptions.find((option: any) => JSON.parse(option).id === pollOptionId);
-        if (pollOption) {
-          pollOption.score += 1; // Increment the vote count
+      if (messagebj) {
+        let message = JSON.parse(messagebj.msg);
+        const oldPoll = JSON.parse(messagebj.msg).pollOptions.find((option: any) => option.id === pollOptionId);
+        const oldPollIndex = JSON.parse(messagebj.msg).pollOptions.findIndex((option: any) => option.id === pollOptionId);
+
+        if (oldPoll) {
+          console.log("updated score", message.pollOptions)
+          message.pollOptions[oldPollIndex] = {
+            id: oldPoll.id,
+            item: oldPoll.item,
+            score: oldPoll.score += 1,
+          }
+          console.log(oldPoll);
+          message.lastUpdated = Date.now();
         }
 
-        // Update the message with the latest poll data
-        const updatedMessage = {
-          id: messageId,
-          caption: message.caption, // Retain the existing caption
-          image: message.image, // Retain the existing image
-          lastUpdated: Date.now(),
-          pollOptions: message.pollOptions, // Updated poll options
-        };
 
-        const messageString = JSON.stringify(updatedMessage);
+        const messageString = JSON.stringify(message);
 
         // Find the index of the message with the matching ID in filteredArray
-        const messageIndex = messageHistory.findIndex((message) => JSON.parse(message.msg).id === messageId);
+        const messageIndex = filteredArray.findIndex((message: any) => JSON.parse(message.msg).id === messageId);
         if (messageIndex !== -1) {
+
+          console.log("we found an updated msg", message)
           // Replace the old message with the updated one
-          let updatedArray: any = [...messageHistory];
+          let updatedArray: any = [...filteredArray];
 
           const myPeerId = libp2p.peerId.toString()
           updatedArray[messageIndex] = { msg: messageString, from: 'me', peerId: myPeerId };
-
           setMessageHistory(updatedArray);
 
           const res = await libp2p.services.pubsub.publish(CHAT_TOPIC, new TextEncoder().encode(messageString));
           console.log('sent updated message to:', res.recipients.map((peerId) => peerId.toString()));
 
           // Update the user's vote for this message
-          userVotes[account][messageId] = [pollOptionId];
-
+          setUserVotes((prevUserVotes: any) => ({
+            ...prevUserVotes,
+            [account]: {
+              ...prevUserVotes[account],
+              [messageId]: [pollOptionId],
+            },
+          }));
         }
       }
     } else {
       // User has already voted for this message, you can handle this case as needed
       console.log(`User ${account} has already voted for message ${messageId}.`);
     }
-  }, [userVotes, messageHistory, setMessageHistory]);
+  }, [userVotes, filteredArray, messageHistory, setMessageHistory]);
+
 
 
   // Function to add a poll item to a message with a default score of 0
 
   const addPollItem = async (messageId: string) => {
-
     if (filteredArray.length < 1) alert("kkk")
-
-  
-
     // const messageIndex = messageHistory.findIndex((msg: any) => JSON.parse(msg.msg).id === messageId);
-    const tempMessageIndex = filteredArray.findIndex((msg: any) => JSON.parse(msg.msg).id === messageId);
-
-    setShowInputOption(false);
-
-    if (tempMessageIndex) {
-
-      console.log(tempMessageIndex);
-
-      return
-
+    const tempMessageIndex = filteredArray.findIndex((m: any) => JSON.parse(m.msg).id == messageId);
+    if (tempMessageIndex != -1) {
       //@ts-ignore
       const message = JSON.parse(filteredArray[tempMessageIndex].msg);
       const newPollOption = {
         id: uuidv4(),
-        item: setPollOptionText,
+        item: pollOptionText,
         score: 0,
       };
       if (!message.pollOptions) {
         message.pollOptions = [];
       }
       message.pollOptions.push(newPollOption);
+      message.lastUpdated = Date.now();
+
       const myPeerId = libp2p.peerId.toString()
 
-      let updatedMessage: any = [...messageHistory];
+      let updatedMessage: any = [...filteredArray];
 
-      updatedMessage[messageHistory.length] = { msg: JSON.stringify(message), from: 'me', peerId: myPeerId };
-
+      updatedMessage[tempMessageIndex] = { msg: JSON.stringify(message), from: 'me', peerId: myPeerId };
       setMessageHistory(updatedMessage);
 
       const res = await libp2p.services.pubsub.publish(CHAT_TOPIC, new TextEncoder().encode(JSON.stringify(message)));
@@ -485,7 +489,6 @@ export default function ChatContainer() {
 
     }
   };
-
 
   const handleSend = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -565,22 +568,27 @@ export default function ChatContainer() {
     } else {
       return (
         <>
-          <Image
-            opacity={0.3}
-            w="100px"
-            h="auto"
-            cursor={"pointer"}
-            src="/lock.jpg" // Replace with your placeholder image URL
-            alt="locked image"
-            onClick={() => {
-              onOpen();
-              fetchConditions();
-            }
 
-              // decryptImage(cid, messageId)
+          <Tooltip label="Click to reveal" aria-label="Click to reveal">
+            <Image
+              opacity={0.3}
+              w="100px"
+              h="auto"
+              cursor={"pointer"}
+              src="/lock.jpg" // Replace with your placeholder image URL
+              alt="locked image"
+              onClick={() => {
+                onOpen();
+                fetchConditions();
+              }
 
-            }
-          />
+                // decryptImage(cid, messageId)
+
+              }
+            />
+
+          </Tooltip>
+
 
           <Modal isOpen={isOpen} onClose={onClose} size="md">
             <ModalOverlay />
@@ -810,9 +818,24 @@ export default function ChatContainer() {
                   {JSON.parse(msg).pollOptions.length > 0 && JSON.parse(msg).pollOptions.map((option: PollOption, i: number) => (
                     <Flex
                       py={2}
-                      onClick={() => vote(JSON.parse(msg).id, option.id)}
+                      onClick={
+                        !userVotes[account!] ? () => vote(JSON.parse(msg).id, option.id) :
+                          userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? () => vote(JSON.parse(msg).id, option.id) : () => { }
+                      }
 
-                      as="button" mb={2} bg="teal" color="white" borderRadius={"10px"} boxShadow={"xs"} border="gray" px={3} w="100%" key={option.id} align="center" justify="space-between" maxW={"400px"}>
+                      as="button" mb={2}
+                      bg={
+                        !userVotes[account!] ? "teal" :
+                          userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? "teal" : "whitesmoke"
+                      }
+
+                      color={
+                        !userVotes[account!] ? "white" :
+                          userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? "white" : "teal"
+                      }
+                      fontWeight="bold"
+                      borderRadius={"10px"}
+                      boxShadow={"xs"} border="gray" px={3} w="100%" key={option.id} align="center" justify="space-between" maxW={"400px"}>
                       <HStack>
                         <Text fontWeight={"bold"}>{i + 1 + "."}</Text>
                         <Text>{option.item}</Text>
@@ -880,22 +903,7 @@ export default function ChatContainer() {
                         />
                       </Tooltip>
 
-                      <Tooltip label="View Images" aria-label="View Images">
-                        <IconButton
-                          bg="red.700"
-                          color="white"
-                          aria-label="View Images"
-                          icon={<FiExternalLink />}
-                          onClick={() => {
-                            console.log(JSON.parse(msg).id)
-                            //  updateMessage(JSON.parse(msg).id, JSON.parse(msg).image)
-                            addPollItem(JSON.parse(msg).id)
-                          }
 
-                          }
-                        // onClick={() => openGalleryModal(message.images)}
-                        />
-                      </Tooltip>
                       <Tooltip label="Mint NFT" aria-label="View Images">
                         <IconButton
                           bg="red.700"
