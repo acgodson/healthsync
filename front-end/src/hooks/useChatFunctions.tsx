@@ -1,11 +1,9 @@
-// useChatFunctions.ts
-
 import { useChatContext } from '@/context/chat-ctx';
 import { useLibp2pContext } from '@/context/ctx';
 import { useCallback, useEffect, useState } from 'react';
 import { CHAT_TOPIC } from '@/lib/constants'
-import { ChatMessage } from '../components/utils/types';
-import { addPollItem, processAndUploadImages } from '../components/utils/chat-utils';
+import { ChatMessage } from '../lib/types';
+import { addPollItem, processAndUploadImages } from '@/components/utils/chat-utils';
 import { v4 as uuidv4 } from 'uuid';
 import { Message } from '@libp2p/interface-pubsub'
 import { usePeerContext } from '@/context/peer-ctx';

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, VStack, Text, Avatar, Badge, Flex, Divider, HStack, Button, Spacer } from '@chakra-ui/react';
-import { CheckCircleIcon, } from '@chakra-ui/icons';
-import { XCircleIcon } from '@heroicons/react/20/solid';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid';
 
 function RightSidebar({ account, libp2p, peerStats, whitelist, onOpen }: any) {
     return (

@@ -1,7 +1,6 @@
 import { useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-// import { mintNFT, applyAccessConditions, fetchAccessConditions } from "../../components/utils";
-import { Setters } from "../components/utils/types";
+import { Setters } from "../lib/types";
 import { mintNFT, applyAccessConditions, fetchAccessConditions } from "@/components/utils/share-utils";
 
 
@@ -29,7 +28,6 @@ export const useNFTModalState = (image: string, account: string, whitelist: any)
     };
 
     const handleMintNFT = async (image: string, account: string, onClose: () => void) => {
-        // Call the onMintNFT function with the selected ownership option
 
         // Mint NFT
         const nft = await mintNFT(image, selectedOwnership, setMinting, toast, account, whitelist);

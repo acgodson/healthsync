@@ -1,7 +1,7 @@
 
 import lighthouse from "@lighthouse-web3/sdk";
 import { encryptionSignature } from "./share-utils";
-import { LightHouseAPIKey } from "../../../config";
+import { LightHouseAPIKey } from "../../lib/constants";
 import { v4 as uuidv4 } from 'uuid';
 import { CHAT_TOPIC } from "@/lib/constants";
 

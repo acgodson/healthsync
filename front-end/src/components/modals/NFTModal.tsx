@@ -5,7 +5,7 @@ import {
     useNFTModalState,
 } from "../../hooks/useNFTModalState";
 import { usePeerContext } from "@/context/peer-ctx";
-import { GalleryModalProps } from "../utils/types";
+import { GalleryModalProps } from "../../lib/types";
 
 
 
@@ -116,7 +116,7 @@ const NFTModal: React.FC<GalleryModalProps> = ({
                         justifyContent={"center"}
                         w="100%" spacing={6}>
                         <Button onClick={onClose}>Close</Button>
-                        <a href="" target='_blank'>
+                        <a href={`https://calibration.filscan.io/en/address/${info.nft[0].contractAddress}/`} target='_blank'>
                             <Button
                                 colorScheme='teal'
                                 isLoading={minting ? true : applying ? true : false}

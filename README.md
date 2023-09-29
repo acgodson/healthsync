@@ -1,5 +1,3 @@
-...refactoring code base!
-
 # HealthSync: Medical Imaging Collaboration on the Blockchain
 
 `Upload >>> discuss >>>  Prepare for future marketplaces`
@@ -10,29 +8,28 @@
 
 - [Quick Start Guide](#quick-start-guide)
   - [Running Locally](#running-locally)
-    - [Start and Connect to a Peer (Rust-based Peer)](#start-and-connect-to-a-peer-rust-based-peer)
-    - [Browser Demo](#browser-demo)
-  - [How HealthSync Works](#how-healthsync-works)
-  - [Advantages of Libp2p Communication](#advantages-of-libp2p-communication)
-  - [The Future of HealthSync](#the-future-of-healthsync)
-  - [Flow Diagram](#flow-diagram)
-  - [Get Involved](#get-involved)
-  - [Connect with Us](#connect-with-us)
+    - [Starting with localhost Rust Peer](#start-and-connect-to-a-peer-rust-based-peer)
+    - [Communication on Browser](#browser-demo)
+  - [How it Works](#how-it-works)
+  - [Libp2p Communication](#libp2p-communication)
+  - [LightHouse Access Condition](#LlghtHouse-access-conditions)
+  - [Road Map](#road-map)
+  - [Let's Connect](#let's-connect)
 
-## Testing
+## Quick Start Quide
 
 ```bash
 git clone
 ```
 
-### Start and connect to a peer
+### Starting with localhost Rust Pee
 
 ```bash
 cd rust-peer
 cargo run
 ```
 
-### Connect with browser
+### Communication on Browser
 
 ### 1. Install dependencies
 
@@ -51,36 +48,45 @@ Start the dev server:
 npm run dev
 ```
 
-## How HealthSync Works
+## How it Works
 
-Combining Filecoin testnet, Libp2p, and Lighthouse to demonstrate a fast and secure communication platform for medical image collaboration.
+Healthsync brings together Libp2p and Lighthouse.storage on filecoin to demonstrate a fast and secure communication platform for medical image collaboration.
 
-- **Off-chain Communication**: Send text, share images seamlessly, share medical images, and vote on diagnoses over libp2p universal connectivity.
+- **Off-chain Communication**: Send text, share images, and vote on diagnoses, demoed on libp2p's universal connectivity.
 
-- **Privacy**: Deploys a custom smart contract on filecoin to maintain whitelist ( and future erc721 transfers). This is used as parameters for sharing files and setting access control on lighthouse.storage.
+- **Privacy & Encryption**: Deploys a custom smart contract on filecoin to maintain whitelist ( and future erc721 transfers). This is employed as a condition  for viewing and sharing files.
 
-- **Encrypted Storage**: Shared medical images are encrypted and securely stored on IPFS using Lighthouse ensuring only authorized users can view them.
+- **Perpetual Storage**: Shared attachments are uploaded on IPFS using Lighthouse.
 
-- **Prepared for future NFTs**: Messages are JSON strings and images stored on IPFS are compatible with On-chain NFT metadata formats.
 
-`When a user mints a conversation containing image and diagnosis options, they can recieve royalties when data miners purchase the image on a different marketplace`
+`In future, when a user mints a conversation containing an image/diagnosis, they can recieve royalties when this data is mined on a different marketplace`
 
-## Advantages of Libp2p on HealthSync
+## Libp2p Communication
 
--**Real-time off-chain Voting**: Seamless voting on medical diagnoses and decisions, without delays or high gas fees.
+![libp2p](/libp2p-hero.svg)
 
--**Peer-to-Peer Connectivity**: Users can connect directly with mutuals subscribed to the same topic, no intermediaries and data routing.
+- **Real-time off-chain Voting**: Users vote on medical diagnoses and decisions, without delays or high gas fees.
 
-## The Future of HealthSync
+- **Peer-to-Peer chat demo**: Subscribers share messages and interactions with each other. By Passing a JSON string with the latest timestamp, we are able track and display more interactions than sending ordinary text via libp2p
 
-While our demo provides a glimpse into HealthSync's potential, we're thinking big for the future. Imagine researchers and AI models using HealthSync's vast repository of medical imaging NFTs to drive advancements in the field while maintaining top-notch security and rewarding contributors with royalties.
+## LightHouse Access Condition
+
+- **Share File Privately**: At the point of sending messages that bear attachments. The   attachment is ibky visble to whitelisted addresses.
+
+- **Access Condition**: owners of erc721 of an already minted image can decrypt the image as long as the access condition exists
+
+![before](/front-end/public/med1.png) | ![after](/front-end/public/med2.png)
+
+## Roadmap
+
+While our demo provides a glimpse into HealthSync's potential, we're thinking big for the future. Imagine researchers and AI models using HealthSync's vast repository of medical imagings to drive advancement in the field, amd earn contributors royalties.
 
 ## Let's Connect
 
 Your feedback, support and ideas would be appreciated.
 
-[![Join our Community](https://img.shields.io/discord/1234567890.svg?label=Discord&logo=Discord&colorB=7289DA&style=for-the-badge)](https://discord.gg/healthsync)
+[![Join our Community](https://img.shields.io/discord/1234567890.svg?label=Discord&logo=Discord&colorB=7289DA&style=for-the-badge)](https://discord.gg/0xtinybird)
 
-[![Follow us on Twitter](https://img.shields.io/twitter/follow/healthsync.svg?style=for-the-badge&logo=Twitter&colorB=1DA1F2&label=Follow%20%40healthsync)](https://twitter.com/acgodson_ng)
+[![Follow us on Twitter](https://img.shields.io/twitter/follow/healthsync.svg?style=for-the-badge&logo=Twitter&colorB=1DA1F2&label=Follow%20%40AC_godson)](https://twitter.com/ac_godson)
 
 [![Visit our Website](https://img.shields.io/badge/Visit%20our%20Website-HealthSync-green?style=for-the-badge&logo=github)](https://healthsync.io)

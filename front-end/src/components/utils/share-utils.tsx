@@ -1,8 +1,8 @@
 import { ethers } from "ethers";
 import lighthouse from "@lighthouse-web3/sdk";
-import { NFTContract } from '../../../config'
-import NFTArtifact from "../../components/utils/HealthSyncNFT.json";
-import contractArtifact from "../../components/utils/HealthSync.json"
+import { NFTContract } from '../../lib/constants'
+import NFTArtifact from "../../lib/HealthSyncNFT.json";
+import contractArtifact from "../../lib/HealthSync.json"
 
 
 export const fetchAccessConditions = async (

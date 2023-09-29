@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { FaRocket } from 'react-icons/fa';
 import { FiPlus } from 'react-icons/fi';
 import NFTModal from '../modals/NFTModal';
-import { PollOption } from '../utils/types';
-import { CheckCircleIcon } from '@chakra-ui/icons';
-import { XCircleIcon } from '@heroicons/react/24/outline';
+import { PollOption } from '../../lib/types';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid';
 import { decryptImage } from '../utils/chat-utils';
+
 
 function ChatMessages({
     filteredArray,

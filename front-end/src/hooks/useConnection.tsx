@@ -4,7 +4,7 @@ import { connectToMultiaddr } from '../lib/libp2p';
 import { ethers } from 'ethers';
 import { useLibp2pContext } from '@/context/ctx';
 import { usePeerContext } from '@/context/peer-ctx';
-import contractArtifact from "../components/utils/HealthSync.json"
+import contractArtifact from "../lib/HealthSync.json"
 import { useListenAddressesContext } from '@/context/listen-addresses-ctx';
 import { useToast } from '@chakra-ui/react';
 import { addToWhitelist } from '@/components/utils/share-utils';
