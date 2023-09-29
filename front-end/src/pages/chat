@@ -1,0 +1,456 @@
+
+// import React, { useCallback, useState } from 'react'
+// import { FormLabel, Box, Text, Image, Button, VStack, HStack, IconButton, Textarea, Flex, Input, Tooltip, Progress, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react'
+// import { FiImage, FiTrash, FiSend, FiPlus } from 'react-icons/fi'
+// import { MetaMaskInpageProvider } from "@metamask/providers";
+// import { usePeerContext } from '@/context/peer-ctx'
+// import { FaRocket } from 'react-icons/fa';
+// import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
+// import NFTModal from '../modals/NFTModal'
+// import { useChatFunctions } from '../../hooks/useChatFunctions'
+// import { decryptImage } from '../utils/chat-utils'
+// import { PollOption } from '../utils/types'
+
+
+
+// declare global {
+//   interface Window {
+//     ethereum?: MetaMaskInpageProvider
+//   }
+// }
+
+
+// export default function ChatContainer() {
+//   const { isOpen, onOpen, onClose } = useDisclosure();
+//   const { peerStats, account } = usePeerContext();
+//   const { sendMessage, vote, uploadProgress, selectedImages, caption, setCaption, filteredArray, setSelectedImages, userVotes, fetchCondition, pollOptionText, setPollOptionText, conditionInfo, addPollOption } = useChatFunctions()
+//   const [decryptedImages, setDecryptedImages] = useState<any>({});
+//   const [selectedMessageId, setSelectedMessageId] = useState("")
+//   const [showInputOption, setShowInputOption] = useState<boolean>(false);
+
+
+//   const handleSend = useCallback(
+//     async (e: React.MouseEvent<HTMLButtonElement>) => {
+//       sendMessage()
+//     },
+//     [sendMessage],
+//   )
+
+//   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+//     const files = event.target.files;
+//     if (files && files.length > 0) {
+//       setSelectedImages(Array.from(files));
+//     }
+//   };
+
+
+//   const handleRemoveImage = (indexToRemove: number) => {
+//     const updatedImages = [...selectedImages];
+//     updatedImages.splice(indexToRemove, 1);
+//     setSelectedImages(updatedImages);
+//   };
+
+
+//   const renderImage = (cid: string, messageId: string, isOpen: any, onOpen: any, onClose: any) => {
+//     if (decryptedImages[messageId]) {
+//       return (
+//         <>
+//           <Image
+//             maxH={"300px"} maxW={"auto"}
+//             src={decryptedImages[messageId]}
+//             alt="image"
+//           />
+
+//         </>
+
+//       );
+//     } else {
+//       return (
+//         <>
+
+//           <Tooltip label="Click to reveal" aria-label="Click to reveal">
+//             <Image
+//               opacity={0.3}
+//               w="100px"
+//               h="auto"
+//               cursor={"pointer"}
+//               src="/lock.jpg" // Replace with your placeholder image URL
+//               alt="locked image"
+//               onClick={() => {
+//                 onOpen();
+//                 fetchCondition(cid);
+//               }
+//               }
+//             />
+
+//           </Tooltip>
+
+
+//           <Modal isOpen={isOpen} onClose={onClose} size="md">
+//             <ModalOverlay />
+//             <ModalContent>
+//               <ModalHeader>Privacy</ModalHeader>
+//               <ModalCloseButton />
+//               <ModalBody>
+//                 <Text>This image is encrypted using lighthouse. Only users who have ownership or shared access can see it</Text>
+//                 <br />
+//                 <HStack>
+//                   <Text fontSize={"xs"}>Author: </Text>
+//                   {conditionInfo && conditionInfo.owner === account ?
+//                     (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+//                     ) : (
+//                       <XCircleIcon className="w-6 h-6 text-red-500" />
+//                     )
+//                   }
+//                 </HStack>
+//                 <HStack>
+//                   <Text fontSize={"xs"}> NFT Contract: </Text>
+//                   {conditionInfo && conditionInfo.nft.length > 0 ?
+//                     (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+//                     ) : (
+//                       <XCircleIcon className="w-6 h-6 text-red-500" />
+//                     )
+//                   }
+//                 </HStack>
+//                 <HStack>
+//                   <Text fontSize={"xs"}>Shared with me: </Text>
+//                   {conditionInfo && conditionInfo.shared.includes(account) ?
+//                     (<CheckCircleIcon className="inline w-6 h-6 text-green-500" />
+//                     ) : (
+//                       <XCircleIcon className="w-6 h-6 text-red-500" />
+//                     )
+//                   }
+//                 </HStack>
+
+
+
+//               </ModalBody>
+//               <ModalFooter >
+//                 <Button bg="gray"
+//                   mr={5}
+//                   onClick={account ? () => decryptImage(account, cid, messageId, setDecryptedImages) : () => { }}
+//                 >
+//                   Unlock
+//                 </Button>
+//                 <a href={`https://files.lighthouse.storage/viewFile/${cid}`} target='_blank'>
+//                   <Button colorScheme="blue"
+//                   >
+//                     View on LightHouse
+//                   </Button>
+//                 </a>
+
+//               </ModalFooter>
+//             </ModalContent>
+//           </Modal>
+//         </>
+
+//       );
+//     }
+//   };
+
+
+//   return (
+//     <>
+
+
+//       {/* Main Chat Area */}
+//       <Box flex="1" display={"flex"} minH="100vh" justifyContent={"space-between"}
+//         flexDirection={"column"}
+//         alignItems={"center"}
+//         overflowY={"auto"}
+
+//       >
+
+
+//         {/* Image Input */}
+//         <Box
+//           h={selectedImages.length > 0 ? "300px" : "80px"}
+//           flex={1}
+//           py={0}
+//           left={0}
+//           right={0}
+//           position={"fixed"}
+//           display={"flex"}
+//           justifyContent={"center"}
+//         >
+
+
+//           <Box px="2" position={'fixed'} bottom={0} w="100%"
+//             maxW="700px"
+//             bg={selectedImages.length > 0 ? "white" : "whiteAlpha.600"}
+//             boxShadow={selectedImages.length > 0 ? "lg" : "none"}
+//             pt={2}
+//             pb={1}
+//             h={selectedImages.length > 0 ? "fit-content" : "fit-content"}
+//             style={{
+//               backdropFilter: "blur(12px)"
+
+//             }}
+
+//           >
+
+//             {/* Progress Indicator */}
+//             {uploadProgress !== null && (
+//               <>
+//                 <Text fontSize={"xs"}>Uploading ({uploadProgress + "%"})</Text>
+//                 <Progress
+//                   value={parseInt(uploadProgress)}
+//                   size="xs"
+//                   colorScheme="green"
+//                   isAnimated
+//                   hasStripe
+//                   my={2}
+//                 />
+//               </>
+//             )}
+
+
+
+//             {peerStats.connected && selectedImages.length < 1 && (
+//               <>
+//                 <input type="file" id="imageInput" accept="image/*" multiple onChange={handleImageSelect} style={{ display: 'none' }} />
+//                 <FormLabel w="100%" htmlFor="imageInput">
+//                   {selectedImages.length < 1 && (
+//                     <Button h="50px" w="100%"
+//                       float={"right"}
+//                       maxW={"200px"}
+//                       as="span" leftIcon={<FiImage />}
+//                       bg="whitesmoke"
+//                       border="2px solid teal"
+//                       color="teal"
+//                       cursor={"pointer"}
+//                     >
+//                       New Upload
+//                     </Button>
+//                   )}
+//                 </FormLabel>
+//               </>
+//             )}
+
+
+
+//             {peerStats.connected && (
+//               <VStack px={2} spacing="2" w="100%" py="5"
+//                 bg="whiteAlpha.400"
+//                 style={{
+//                   backdropFilter: "12px"
+//                 }}
+//               >
+
+//                 <VStack w="100%">
+
+
+//                   <HStack w="100%">
+//                     {selectedImages.map((image, index) => (
+//                       <VStack key={index} align="center" position="relative">
+//                         <IconButton
+//                           aria-label="Remove Image"
+//                           icon={<FiTrash color="red" />}
+//                           position="absolute"
+//                           top="2px"
+//                           right="2px"
+//                           size="sm"
+//                           onClick={() => handleRemoveImage(index)} // Handle image removal
+//                         />
+//                         <Image src={URL.createObjectURL(image)} alt={`Selected Image ${index}`} maxH={"70px"} maxW={"70px"} />
+//                       </VStack>
+//                     ))}
+
+//                   </HStack>
+
+//                   <Textarea
+//                     w="100%"
+//                     border={"1px solid green"}
+//                     placeholder="Add a caption..."
+//                     value={caption}
+//                     name="message"
+//                     onChange={(e) => setCaption(e.target.value)}
+//                     size="sm"
+//                   />
+//                 </VStack>
+
+//                 <Button
+//                   // position={"absolute"}
+//                   zIndex={"tooltip"}
+//                   right={0}
+//                   leftIcon={<FiSend />}
+//                   w="80px" onClick={handleSend} colorScheme="teal" px={3} boxShadow={"md"}>
+//                   Send
+//                 </Button>
+
+//               </VStack>
+//             )}
+
+
+//           </Box>
+//         </Box>
+
+
+
+
+
+//         {/* Chat messages */}
+//         <Box w="100%"
+//           minH="100vh"
+//           pb="30vh"
+//           bg="#f3f4f6"
+//           overflowY={"auto"}
+//         >
+//           {filteredArray.map(({ msg, from, peerId }, idx) => (
+//             <Box
+//               key={JSON.parse(msg).id}
+//               mb="4"
+//               display="flex"
+//               width={"100%"}
+//               py={5}
+//               borderTop={"0.5px solid #c4cad2"}
+//               justifyContent={"center"}
+//               flexDirection={"column"}
+//               alignItems={"center"}
+
+//             >
+//               <Box py={3}>
+//                 <Box
+//                   h="30px"
+//                   w="30px"
+//                   borderRadius={"5px"}
+//                   left={"-350px"}
+//                   // right={0}
+//                   rounded="full"
+//                   position={"relative"}
+//                   bg={"gray.200"}
+//                 />
+//               </Box>
+
+//               <Box
+//                 bg="white" boxShadow={"sm"} pl={6} py={3} w="100%"
+//                 maxW="700px"
+//               >
+
+//                 <Text pb={6} fontWeight={"semibold"} fontSize={"sm"}>{JSON.parse(msg).caption}</Text>
+//                 {JSON.parse(msg).image.length > 1 && (
+//                   <Box>{renderImage(JSON.parse(msg).image, JSON.parse(msg).id, isOpen, onOpen, onClose)}</Box>
+//                 )}
+
+
+//                 <>
+//                   {JSON.parse(msg).image.length > 1 && (
+//                     <Text pb={1} fontWeight={"bold"} fontSize={"xs"}>Poll: Tap to Choose an appropraite option</Text>)}
+
+
+
+//                   {JSON.parse(msg).pollOptions.length > 0 && JSON.parse(msg).pollOptions.map((option: PollOption, i: number) => (
+//                     <Flex
+//                       py={2}
+//                       onClick={
+//                         !userVotes[account!] ? () => vote(JSON.parse(msg).id, option.id) :
+//                           userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? () => vote(JSON.parse(msg).id, option.id) : () => { }
+//                       }
+
+//                       as="button" mb={2}
+//                       bg={
+//                         !userVotes[account!] ? "teal" :
+//                           userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? "teal" : "whitesmoke"
+//                       }
+
+//                       color={
+//                         !userVotes[account!] ? "white" :
+//                           userVotes[account!] && !userVotes[account!][JSON.parse(msg).id] ? "white" : "teal"
+//                       }
+//                       fontWeight="bold"
+//                       borderRadius={"10px"}
+//                       boxShadow={"xs"} border="gray" px={3} w="100%" key={option.id} align="center" justify="space-between" maxW={"400px"}>
+//                       <HStack>
+//                         <Text fontWeight={"bold"}>{i + 1 + "."}</Text>
+//                         <Text>{option.item}</Text>
+//                       </HStack>
+//                       <HStack>
+//                         <Text>{option.score}</Text>
+//                       </HStack>
+//                     </Flex>
+//                   ))}
+//                 </>
+
+
+//                 {/* Poll Option Addition Form */}
+//                 {selectedMessageId === JSON.parse(msg).id && showInputOption && (
+//                   <Box>
+//                     <VStack>
+//                       <br />
+//                       <Text fontSize={"xs"}>Suggest options for colleagues to vote </Text>
+//                       <Input
+//                         color="#333"
+//                         maxW="400px"
+//                         placeholder="Enter poll option"
+//                         value={pollOptionText}
+//                         onChange={(e) => setPollOptionText(e.target.value)}
+//                       />
+
+//                       <Button
+//                         mt={5}
+//                         h="30px"
+//                         fontSize="sm"
+//                         colorScheme='teal'
+//                         onClick={() => addPollOption(JSON.parse(msg).id, setShowInputOption)}
+//                       >
+//                         Add Option
+//                       </Button>
+//                     </VStack>
+//                   </Box>
+//                 )}
+
+//               </Box>
+
+//               {/* Poll Option Addition Button */}
+//               {account && JSON.parse(msg).image.length > 1 &&
+
+//                 (
+//                   <Box className="options-menu" mt={2}>
+//                     <HStack>
+//                       <Tooltip label="Add Poll Option" aria-label="Add Poll Option">
+//                         <IconButton
+//                           bg="red.700"
+//                           color="white"
+//                           aria-label="Add Poll Option"
+//                           icon={<FiPlus />}
+//                           onClick={() => {
+//                             setSelectedMessageId(JSON.parse(msg).id);
+//                             setShowInputOption(true)
+//                           }}
+//                         // onClick={() =>
+//                         //  updateMessage(JSON.parse(msg).id, JSON.parse(msg).image)
+//                         //   vote(JSON.parse(msg).id, 1)
+//                         // }
+
+
+//                         />
+//                       </Tooltip>
+
+
+//                       <Tooltip label="Mint NFT" aria-label="View Images">
+//                         <IconButton
+//                           bg="red.700"
+//                           color="white"
+//                           aria-label="Mint NFT"
+//                           icon={<FaRocket />}
+//                           // onClick={() => openNFTModal()}
+//                         />
+//                       </Tooltip>
+//                     </HStack>
+//                     {/* <NFTModal isOpen={isNFT} image={JSON.parse(msg).image} onClose={closeNFTModal} /> */}
+//                   </Box>
+
+//                 )}
+
+//             </Box>
+
+
+//           ))}
+//         </Box>
+//       </Box >
+
+
+//     </>
+
+//   )
+// }
